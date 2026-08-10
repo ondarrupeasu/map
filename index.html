@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CinemaFilmak — Mapa del ecosistema</title>
+<meta name="description" content="Mapa visual de las apps, webs e infraestructura de CinemaFilmak.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Map">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+</head>
+<body>
+<style>
+  :root{
+    /* light (por defecto) — pensado para imprimir a PDF */
+    --bg:#f4f1ea; --panel:#fffdf8; --ink:#211d18; --muted:#6d675d;
+    --line:#e4ddd0; --line-strong:#d6cdbd;
+    --accent:#e0473a; --accent-soft:#ff5a4d; --on-accent:#fff;
+    --ok:#2f8a54; --wip:#b0781a; --idea:#8b857b;
+    --shadow:0 1px 0 rgba(0,0,0,.03), 0 6px 22px -14px rgba(30,20,10,.28);
+    --mono:ui-monospace,"SF Mono",Menlo,"DejaVu Sans Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#131210; --panel:#1c1a16; --ink:#ece7de; --muted:#9b958a;
+      --line:#2b2822; --line-strong:#3a362f;
+      --accent:#ff5a4d; --accent-soft:#ff6f63; --on-accent:#1a120f;
+      --ok:#5fc082; --wip:#e2ab4d; --idea:#847e73;
+      --shadow:0 1px 0 rgba(255,255,255,.02), 0 10px 30px -18px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f1ea; --panel:#fffdf8; --ink:#211d18; --muted:#6d675d;
+    --line:#e4ddd0; --line-strong:#d6cdbd;
+    --accent:#e0473a; --accent-soft:#ff5a4d; --on-accent:#fff;
+    --ok:#2f8a54; --wip:#b0781a; --idea:#8b857b;
+    --shadow:0 1px 0 rgba(0,0,0,.03), 0 6px 22px -14px rgba(30,20,10,.28);
+  }
+  :root[data-theme="dark"]{
+    --bg:#131210; --panel:#1c1a16; --ink:#ece7de; --muted:#9b958a;
+    --line:#2b2822; --line-strong:#3a362f;
+    --accent:#ff5a4d; --accent-soft:#ff6f63; --on-accent:#1a120f;
+    --ok:#5fc082; --wip:#e2ab4d; --idea:#847e73;
+    --shadow:0 1px 0 rgba(255,255,255,.02), 0 10px 30px -18px rgba(0,0,0,.7);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0}
+  .wrap{
+    font-family:var(--sans); background:var(--bg); color:var(--ink);
+    padding:clamp(20px,4vw,56px) clamp(16px,4vw,48px) 64px;
+    max-width:1180px; margin:0 auto; line-height:1.5;
+  }
+
+  /* ── hero ─────────────────────────────── */
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--accent); margin:0 0 14px;
+  }
+  h1{
+    font-size:clamp(38px,7vw,68px); line-height:.98; letter-spacing:-.03em;
+    font-weight:800; margin:0; text-wrap:balance;
+  }
+  h1 .r{color:var(--accent)}
+  .lede{
+    max-width:56ch; color:var(--muted); font-size:clamp(15px,1.6vw,18px);
+    margin:16px 0 0;
+  }
+  .metabar{
+    display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center;
+    margin-top:22px; font-family:var(--mono); font-size:12.5px; color:var(--muted);
+  }
+  .metabar b{color:var(--ink); font-weight:600}
+  .legend{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+
+  /* estado */
+  .st{
+    display:inline-flex; align-items:center; gap:6px; font-family:var(--mono);
+    font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+    padding:3px 9px 3px 7px; border-radius:100px; border:1px solid var(--line-strong);
+    color:var(--muted); white-space:nowrap;
+  }
+  .st::before{content:""; width:7px; height:7px; border-radius:50%; background:currentColor; flex:none}
+  .st.ok{color:var(--ok)} .st.wip{color:var(--wip)} .st.idea{color:var(--idea)}
+
+  /* ── trunk / branching motif ──────────── */
+  .trunk{display:flex; justify-content:center; margin:30px 0 4px}
+  .trunk span{width:2px; height:34px; background:linear-gradient(var(--accent),transparent)}
+
+  /* ── branch section ───────────────────── */
+  .branch{margin-top:38px; border-top:1px solid var(--line); padding-top:22px}
+  .bhead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:18px}
+  .bhead h2{
+    font-size:clamp(20px,2.6vw,27px); letter-spacing:-.01em; margin:0; font-weight:750;
+    position:relative; padding-left:16px;
+  }
+  .bhead h2::before{
+    content:""; position:absolute; left:0; top:.12em; bottom:.12em; width:4px;
+    background:var(--accent); border-radius:2px;
+  }
+  .bhead .count{font-family:var(--mono); font-size:12px; color:var(--muted)}
+  .bhead .scope{font-size:14px; color:var(--muted); flex:1 1 240px; min-width:200px}
+
+  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(248px,1fr))}
+
+  .node{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:15px 16px 14px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:8px; min-height:112px;
+    transition:transform .12s ease, border-color .12s ease;
+  }
+  .node .row{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .node h3{font-size:16.5px; margin:0; letter-spacing:-.01em; font-weight:700}
+  .node .desc{font-size:13.5px; color:var(--muted); margin:0; flex:1}
+  .node .foot{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:2px}
+  a.dom, span.tech{
+    font-family:var(--mono); font-size:12px; letter-spacing:-.01em;
+    text-decoration:none; color:var(--accent);
+    border-bottom:1px dashed color-mix(in srgb,var(--accent) 45%, transparent);
+    padding-bottom:1px;
+  }
+  span.tech{color:var(--muted); border-bottom:0}
+  a.dom:hover{border-bottom-style:solid}
+  a.dom:focus-visible, .node:focus-within{outline:2px solid var(--accent); outline-offset:3px; border-radius:6px}
+  @media (hover:hover){ .node:hover{transform:translateY(-2px); border-color:var(--line-strong)} }
+
+  .foot-note{
+    margin-top:44px; padding-top:18px; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:12px; color:var(--muted); line-height:1.7;
+  }
+  .foot-note b{color:var(--ink)}
+
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+
+  /* ── impresión → PDF limpio ───────────── */
+  @media print{
+    :root{
+      --bg:#fff; --panel:#fff; --ink:#000; --muted:#444;
+      --line:#ccc; --line-strong:#aaa; --accent:#c53d30; --shadow:none;
+    }
+    .wrap{max-width:none; padding:0}
+    .node{break-inside:avoid; box-shadow:none}
+    .branch{break-inside:avoid}
+    @page{margin:14mm}
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Mapa del ecosistema · 9 ago 2026</p>
+    <h1>Cinema<span class="r">Filmak</span></h1>
+    <p class="lede">Todo lo construido de un vistazo — apps de escritorio, webs e infraestructura de la suite audiovisual de Alex (profesor de realización A/V, CIFP Tartanga LHII). Referencia personal.</p>
+    <div class="metabar">
+      <span><b>6</b> apps escritorio</span>
+      <span><b>10</b> webs · PWAs</span>
+      <span><b>5</b> piezas de infra</span>
+      <span><b>5</b> ideas en curso</span>
+      <span>· dominio raíz <b>cinemafilmak.com</b></span>
+      <span>· ⌘P → guardar como PDF</span>
+    </div>
+    <div class="legend">
+      <span class="st ok">en producción</span>
+      <span class="st wip">en construcción</span>
+      <span class="st idea">idea · brief</span>
+    </div>
+  </header>
+
+  <div class="trunk"><span></span></div>
+
+  <!-- ── Escritorio ─────────────────── -->
+  <section class="branch">
+    <div class="bhead">
+      <h2>Apps de escritorio</h2>
+      <span class="count">suite «-R» · 6</span>
+      <span class="scope">Aplicaciones PySide6 para Mac/Windows. Se distribuyen por GitHub Releases (auto-updater propio + firma Ed25519).</span>
+    </div>
+    <div class="grid">
+      <article class="node"><div class="row"><h3>LiveMixR</h3><span class="st ok">en uso</span></div><p class="desc">Mezclador de vídeo en directo: ATEM, NDI, cámara X8, superficie de control y PTZ.</p><div class="foot"><span class="tech">Escritorio · Releases</span></div></article>
+      <article class="node"><div class="row"><h3>PostHandleR</h3><span class="st wip">activo</span></div><p class="desc">Suite de postpro (el «Desktop» de QRClappeR); camino a NLE embebiendo FreeCut.</p><div class="foot"><span class="tech">Escritorio · Releases</span></div></article>
+      <article class="node"><div class="row"><h3>MediaDriveR</h3><span class="st wip">fase 2</span></div><p class="desc">Montar discos remotos y hacer streaming de su media entre equipos (P2P estilo Strada).</p><div class="foot"><span class="tech">Escritorio · Releases</span></div></article>
+      <article class="node"><div class="row"><h3>VideoCatchR</h3><span class="st ok">MVP</span></div><p class="desc">Descargador de vídeo: frontend sobre yt-dlp con cola, conversión y progreso.</p><div class="foot"><span class="tech">Escritorio · Releases</span></div></article>
+      <article class="node"><div class="row"><h3>AudioPatchR</h3><span class="st wip">en curso</span></div><p class="desc">Router de audio por app + mezcla + delay + grabación multipista (tipo Loopback).</p><div class="foot"><span class="tech">Escritorio · Releases</span></div></article>
+      <article class="node"><div class="row"><h3>LoudnessFixR</h3><span class="st wip">empaquetando</span></div><p class="desc">Normalizador de loudness EBU R128; build ARM hecho, falta Intel/Windows.</p><div class="foot"><span class="tech">Escritorio · Releases</span></div></article>
+    </div>
+  </section>
+
+  <!-- ── Webs & PWAs ────────────────── -->
+  <section class="branch">
+    <div class="bhead">
+      <h2>Webs &amp; PWAs</h2>
+      <span class="count">cinemafilmak.com · 10</span>
+      <span class="scope">Sitios estáticos y apps web (casi todo en GitHub Pages). Los dominios son clicables.</span>
+    </div>
+    <div class="grid">
+      <article class="node"><div class="row"><h3>QRClappeR</h3><span class="st ok">producción</span></div><p class="desc">Claqueta digital (PWA). Sincroniza ajustes en la nube; el parte no sale del móvil.</p><div class="foot"><a class="dom" href="https://qrclapper.cinemafilmak.com" target="_blank" rel="noopener">qrclapper.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>AVHandbook</h3><span class="st ok">en vivo</span></div><p class="desc">Referencia/teoría audiovisual interactiva (vídeo + próximamente audio).</p><div class="foot"><a class="dom" href="https://avhandbook.cinemafilmak.com" target="_blank" rel="noopener">avhandbook.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>SoundLab</h3><span class="st ok">en vivo</span></div><p class="desc">Patio de juegos del sonido (Web Audio): síntesis, filtros, muestreo, estéreo. Trilingüe.</p><div class="foot"><a class="dom" href="https://soundlab.cinemafilmak.com" target="_blank" rel="noopener">soundlab.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>MTA</h3><span class="st ok">fase 1</span></div><p class="desc">Libro «Medios Técnicos Audiovisuales» reconstruido como web (7 unidades + buscador).</p><div class="foot"><a class="dom" href="https://mta.cinemafilmak.com" target="_blank" rel="noopener">mta.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>CinemaFilmak</h3><span class="st ok">en vivo</span></div><p class="desc">Web principal del proyecto (hosting Infomaniak).</p><div class="foot"><a class="dom" href="https://cinemafilmak.com" target="_blank" rel="noopener">cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>LiveCastR</h3><span class="st wip">montando</span></div><p class="desc">Directo tipo YouTube: iPhone → MediaMTX → web HLS con login. MediaMTX pendiente en el box.</p><div class="foot"><a class="dom" href="https://live.cinemafilmak.com" target="_blank" rel="noopener">live.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>Puzzle de realización</h3><span class="st wip">nivel 2</span></div><p class="desc">Juego educativo de enrutado de instalación de TV/espectáculo (inventario, coste, fibra).</p><div class="foot"><a class="dom" href="https://puzzle.cinemafilmak.com" target="_blank" rel="noopener">puzzle.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>DRM Lab</h3><span class="st wip">docente</span></div><p class="desc">Maqueta para enseñar la cadena DRM del streaming (Shaka/EME/CENC, contenido propio).</p><div class="foot"><a class="dom" href="https://drm.cinemafilmak.com" target="_blank" rel="noopener">drm.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>Viewfinder</h3><span class="st wip">prototipo</span></div><p class="desc">Visor de director / simulador de focal en el navegador.</p><div class="foot"><a class="dom" href="https://viewfinder.cinemafilmak.com" target="_blank" rel="noopener">viewfinder.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>DMXSimulatoR</h3><span class="st idea">brief</span></div><p class="desc">Simulador educativo de iluminación DMX + visor 3D (PWA). Dominio reservado.</p><div class="foot"><a class="dom" href="https://dmxsimulator.cinemafilmak.com" target="_blank" rel="noopener">dmxsimulator.cinemafilmak.com</a></div></article>
+    </div>
+  </section>
+
+  <!-- ── Infraestructura ────────────── -->
+  <section class="branch">
+    <div class="bhead">
+      <h2>Infraestructura</h2>
+      <span class="count">servicios · 5</span>
+      <span class="scope">La fontanería que sostiene las apps. Regla: datos en managed, cómputo desechable en el box.</span>
+    </div>
+    <div class="grid">
+      <article class="node"><div class="row"><h3>Box Hetzner</h3><span class="st ok">recién montado</span></div><p class="desc">Servidor propio (CX23, Falkenstein) con coturn: relay TURN/STUN que sustituye a Metered.</p><div class="foot"><a class="dom" href="https://turn.cinemafilmak.com:5349" target="_blank" rel="noopener">turn.cinemafilmak.com</a><span class="tech">178.105.108.103 · ~7,25€/mes</span></div></article>
+      <article class="node"><div class="row"><h3>Neon</h3><span class="st ok">free</span></div><p class="desc">Base de datos (Postgres) del sync de ajustes de QRClappeR. Managed, con copias de seguridad.</p><div class="foot"><span class="tech">Postgres · managed</span></div></article>
+      <article class="node"><div class="row"><h3>Render</h3><span class="st ok">free</span></div><p class="desc">Aloja las APIs backend (qrclapper-api, livemixr-api). Se despierta con un ping.</p><div class="foot"><span class="tech">qrclapper-api.onrender.com</span></div></article>
+      <article class="node"><div class="row"><h3>MediaMTX</h3><span class="st ok">self-host</span></div><p class="desc">Servidor de streaming SRT/HLS/WebRTC que usan QRClappeR, PostHandleR, LiveMixR y LiveCastR.</p><div class="foot"><span class="tech">binario · self-host</span></div></article>
+      <article class="node"><div class="row"><h3>GitHub Releases</h3><span class="st ok">activo</span></div><p class="desc">Canal de distribución y auto-update de las 6 apps de escritorio (repos de ondarrupeasu).</p><div class="foot"><span class="tech">github.com/ondarrupeasu</span></div></article>
+    </div>
+  </section>
+
+  <!-- ── Ideas / en curso ───────────── -->
+  <section class="branch">
+    <div class="bhead">
+      <h2>Ideas &amp; en construcción</h2>
+      <span class="count">roadmap · 5</span>
+      <span class="scope">Proyectos con sesión propia o brief, aún sin producto terminado.</span>
+    </div>
+    <div class="grid">
+      <article class="node"><div class="row"><h3>InterTalkR</h3><span class="st wip">en curso</span></div><p class="desc">Intercom de audio en directo A Coruña ↔ Tartanga (WebRTC/SFU). Razón nº1 del box; app cliente Android nativa.</p><div class="foot"><span class="tech">SFU → box Hetzner</span></div></article>
+      <article class="node"><div class="row"><h3>BiltegiR</h3><span class="st wip">datos en sept.</span></div><p class="desc">Inventario y préstamos del almacén de realización de Tartanga (sobre NextCloud Tables + QR).</p><div class="foot"><span class="tech">NextCloud · interno</span></div></article>
+      <article class="node"><div class="row"><h3>LightDesignR</h3><span class="st idea">futuro</span></div><p class="desc">Control DMX real (Art-Net/sACN): la evolución de escritorio de DMXSimulatoR.</p><div class="foot"><span class="tech">idea</span></div></article>
+      <article class="node"><div class="row"><h3>Switcher A/V</h3><span class="st idea">spike</span></div><p class="desc">Controlador de mezcla vía OBS (obs-websocket) como material de clase.</p><div class="foot"><span class="tech">spike</span></div></article>
+      <article class="node"><div class="row"><h3>launchR</h3><span class="st idea">standby</span></div><p class="desc">Suite vendible estilo NDI Tools: hub + instalador común de las 6 apps de escritorio.</p><div class="foot"><span class="tech">producto · standby</span></div></article>
+    </div>
+  </section>
+
+  <p class="foot-note">
+    <b>Cómo mantenerlo:</b> este mapa lo genera MissionControl. Fuente en <b>missioncontrol/ecosistema.html</b> — para actualizarlo, edítalo y vuelve a publicar el Artifact (misma URL).<br>
+    <b>Estado:</b> los dominios que resuelven están desplegados (casi todos en GitHub Pages); «en construcción» = existe pero no terminado; «idea/brief» = solo documento o sesión.
+  </p>
+</div>
+
+</body>
+</html>
