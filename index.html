@@ -227,7 +227,7 @@
       <article class="node"><div class="row"><h3>Neon</h3><span class="st ok">free</span></div><p class="desc">Base de datos (Postgres) del sync de ajustes de QRClappeR. Managed, con copias de seguridad.</p><div class="foot"><span class="tech">Postgres · managed</span></div></article>
       <article class="node"><div class="row"><h3>Render</h3><span class="st wip">vaciándose</span></div><p class="desc">Las APIs (qrclapper-api, livemixr-api, señalización de InterTalkR) se movieron al box para quitar el cold-start. Solo queda BiltegiR y el rollback temporal de InterTalkR; el resto, suspendido.</p><div class="foot"><span class="tech">free · casi retirado</span></div></article>
       <article class="node"><div class="row"><h3>MediaMTX</h3><span class="st ok">self-host</span></div><p class="desc">Servidor de streaming SRT/HLS/WebRTC que usan QRClappeR, PostHandleR, LiveMixR y LiveCastR.</p><div class="foot"><span class="tech">binario · self-host</span></div></article>
-      <article class="node"><div class="row"><h3>Portal de descargas</h3><span class="st ok">público</span></div><p class="desc">apps.cinemafilmak.com (Infomaniak): descarga Mac/Windows + auto-update firmado de las 6 apps. GitHub = fábrica privada (CI compila el .exe).</p><div class="foot"><a class="dom" href="https://apps.cinemafilmak.com" target="_blank" rel="noopener">apps.cinemafilmak.com</a></div></article>
+      <article class="node"><div class="row"><h3>Portal de descargas</h3><span class="st ok">público</span></div><p class="desc">apps.cinemafilmak.com (Infomaniak): descarga Mac/Windows + auto-update firmado de las apps de la suite, ahora con sección de Utilidades. GitHub = fábrica privada (CI compila el .exe).</p><div class="foot"><a class="dom" href="https://apps.cinemafilmak.com" target="_blank" rel="noopener">apps.cinemafilmak.com</a></div></article>
     </div>
   </section>
 
@@ -235,15 +235,17 @@
   <section class="branch">
     <div class="bhead">
       <h2>Ideas &amp; en construcción</h2>
-      <span class="count">roadmap · 5</span>
+      <span class="count">roadmap · 7</span>
       <span class="scope">Proyectos con sesión propia o brief, aún sin producto terminado.</span>
     </div>
     <div class="grid">
       <article class="node"><div class="row"><h3>InterTalkR</h3><span class="st ok">en marcha</span></div><p class="desc">Intercom de audio/vídeo en directo A Coruña ↔ Tartanga (WebRTC/SFU), roles admin/operador. Ya TODO en el box Hetzner (SFU LiveKit + web/admin/señalización); Render solo queda de rollback temporal.</p><div class="foot"><a class="dom" href="https://intertalkr.cinemafilmak.com" target="_blank" rel="noopener">intertalkr.cinemafilmak.com</a><span class="tech">box Hetzner</span></div></article>
-      <article class="node"><div class="row"><h3>MediaCastR</h3><span class="st ok">publicada (Mac)</span></div><p class="desc">7ª app «-R»: envía vídeo, audio y fotos LOCALES a cualquier receptor — Google Cast (Chromecast/Google TV) y AirPlay. Google Cast completo (con transcode automático); ya en el portal (Mac arm64 beta), Windows por CI y AirPlay en camino.</p><div class="foot"><a class="dom" href="https://apps.cinemafilmak.com" target="_blank" rel="noopener">apps.cinemafilmak.com</a><span class="tech">Escritorio · Mac</span></div></article>
+      <article class="node"><div class="row"><h3>MediaCastR</h3><span class="st ok">publicada (Mac + Win)</span></div><p class="desc">7ª app «-R»: envía vídeo, audio y fotos LOCALES a cualquier receptor — Google Cast (Chromecast/Google TV) y AirPlay. Google Cast completo (con transcode automático); en el portal para Mac y Windows; AirPlay en camino.</p><div class="foot"><a class="dom" href="https://apps.cinemafilmak.com" target="_blank" rel="noopener">apps.cinemafilmak.com</a><span class="tech">Escritorio · Mac + Win</span></div></article>
       <article class="node"><div class="row"><h3>BiltegiR</h3><span class="st wip">datos en sept.</span></div><p class="desc">Inventario y préstamos del almacén de realización de Tartanga (sobre NextCloud Tables + QR).</p><div class="foot"><span class="tech">NextCloud · interno</span></div></article>
       <article class="node"><div class="row"><h3>LightDesignR</h3><span class="st idea">futuro</span></div><p class="desc">Control DMX real (Art-Net/sACN): la evolución de escritorio de DMXSimulatoR.</p><div class="foot"><span class="tech">idea</span></div></article>
       <article class="node"><div class="row"><h3>launchR</h3><span class="st idea">standby</span></div><p class="desc">Suite vendible estilo NDI Tools: hub + instalador común de las 6 apps de escritorio.</p><div class="foot"><span class="tech">producto · standby</span></div></article>
+      <article class="node"><div class="row"><h3>MirroR</h3><span class="st wip">en construcción</span></div><p class="desc">Utilidad: compara dos carpetas o discos y detecta qué falta, qué cambió y qué es más nuevo o más viejo — con verificación por checksum (integridad de backups de footage). Motor probado; v1 solo lectura, v2 copia guiada + MHL.</p><div class="foot"><span class="tech">Escritorio · Mac + Win · utilidad</span></div></article>
+      <article class="node"><div class="row"><h3>BatteryControlleR</h3><span class="st wip">en construcción</span></div><p class="desc">Utilidad: estado de la batería del Mac en la barra de menús — carga, avisos e histórico con curvas. MVP completo, sin publicar.</p><div class="foot"><span class="tech">Escritorio · Mac · utilidad</span></div></article>
     </div>
   </section>
 
