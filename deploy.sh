@@ -25,7 +25,14 @@ cat > _head.part <<'EOF'
 </head>
 <body>
 EOF
-printf '\n</body>\n</html>\n' > _tail.part
+cat > _tail.part <<'EOF'
+
+<!-- AppReportR: contador de visitas (sin cookies, sin IP). Va aquí (plantilla de deploy),
+     no en ecosistema.html, para que quede solo en el mapa público y no en el Artifact privado. -->
+<script>fetch('https://stats.cinemafilmak.com/px?s=map&e=view',{mode:'no-cors'}).catch(()=>{})</script>
+</body>
+</html>
+EOF
 cat _head.part "$ECO" _tail.part > index.html
 rm _head.part _tail.part
 
