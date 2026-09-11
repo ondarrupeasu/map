@@ -29,7 +29,7 @@ cat > _tail.part <<'EOF'
 
 <!-- AppReportR: contador de visitas (sin cookies, sin IP). Va aquí (plantilla de deploy),
      no en ecosistema.html, para que quede solo en el mapa público y no en el Artifact privado. -->
-<script>fetch('https://appreportr.cinemafilmak.com/px?s=map&e=view',{mode:'no-cors'}).catch(()=>{})</script>
+<script>fetch('https://panel.cinemafilmak.com/px?s=map&e=view',{mode:'no-cors'}).catch(()=>{})</script>
 </body>
 </html>
 EOF
